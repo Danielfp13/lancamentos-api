@@ -2,10 +2,12 @@ package com.lancamento.api.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lancamento.api.model.domain.Categoria;
 import com.lancamento.api.model.service.CategoriaService;
+
 
 @RestController
 @RequestMapping(value = "/categorias")
@@ -29,11 +32,21 @@ public class CategoriaResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Void> salvar(@RequestBody Categoria obj){
+	public ResponseEntity<Categoria> salvar(@RequestBody Categoria obj){
 		obj = categoriaService.salvar(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").
 				buildAndExpand(obj.getCodigo()).toUri();				
-		return ResponseEntity.created(uri).build();
+		return ResponseEntity.created(uri).body(obj);
 		
 	}
+	
+	// busca por id
+	@GetMapping(value ="/{codigo}")
+	public ResponseEntity<Optional<Categoria>> buscar(@PathVariable Long codigo) {
+		Optional<Categoria> obj = categoriaService.buscar(codigo);
+		return ResponseEntity.ok().body(obj);
+		
+	}
+	
+
 }
