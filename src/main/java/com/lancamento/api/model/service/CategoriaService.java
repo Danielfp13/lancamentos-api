@@ -20,5 +20,8 @@ public class CategoriaService{
 		return categoriaRepository.findAll();
 	}
 	
-	
+	public Categoria salvar(Categoria obj) {
+		obj = categoriaRepository.save(obj);
+		return obj;
+	}
 }
