@@ -2,7 +2,6 @@ package com.lancamento.api.resources;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,36 +16,33 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.lancamento.api.model.domain.Categoria;
 import com.lancamento.api.model.service.CategoriaService;
 
-
 @RestController
 @RequestMapping(value = "/categorias")
 public class CategoriaResource {
 
 	@Autowired
 	private CategoriaService categoriaService;
-	
+
 	@GetMapping
 	public ResponseEntity<List<Categoria>> listar() {
 		return ResponseEntity.ok().body(categoriaService.listar());
-		
-	}
-	
-	@PostMapping
-	public ResponseEntity<Categoria> salvar(@RequestBody Categoria obj){
-		obj = categoriaService.salvar(obj);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").
-				buildAndExpand(obj.getCodigo()).toUri();				
-		return ResponseEntity.created(uri).body(obj);
-		
-	}
-	
-	// busca por id
-	@GetMapping(value ="/{codigo}")
-	public ResponseEntity<Optional<Categoria>> buscar(@PathVariable Long codigo) {
-		Optional<Categoria> obj = categoriaService.buscar(codigo);
-		return ResponseEntity.ok().body(obj);
-		
-	}
-	
 
+	}
+
+	@PostMapping
+	public ResponseEntity<Categoria> salvar(@RequestBody Categoria obj) {
+		obj = categoriaService.salvar(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getCodigo())
+				.toUri();
+		return ResponseEntity.created(uri).body(obj);
+
+	}
+
+	// busca por id
+	@GetMapping(value = "/{codigo}")
+	public ResponseEntity<Categoria> buscar(@PathVariable Integer codigo) {
+		Categoria obj = categoriaService.buscar(codigo);
+		return ResponseEntity.ok().body(obj);
+
+	}
 }
