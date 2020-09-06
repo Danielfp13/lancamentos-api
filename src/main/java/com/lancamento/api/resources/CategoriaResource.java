@@ -3,6 +3,8 @@ package com.lancamento.api.resources;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +32,7 @@ public class CategoriaResource {
 	}
 
 	@PostMapping
-	public ResponseEntity<Categoria> salvar(@RequestBody Categoria obj) {
+	public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria obj) {
 		obj = categoriaService.salvar(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getCodigo())
 				.toUri();

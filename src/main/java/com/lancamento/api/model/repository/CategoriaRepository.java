@@ -9,8 +9,4 @@ public interface CategoriaRepository  extends JpaRepository<Categoria,Integer>{
 
 	@Query( value="SELECT * FROM categoria c where c.codigo = :codigo ",nativeQuery=true )
 	Categoria findOne(Integer codigo);
-
-	
-
-
 }

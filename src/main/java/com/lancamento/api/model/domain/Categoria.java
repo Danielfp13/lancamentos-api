@@ -5,15 +5,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="categoria")
+@Valid
 public class Categoria {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
 	
+	@NotEmpty
+	//(message = "O campo nome obrigatoriemnte deve ser preenchido.")
+	@NotNull
+	//(message = "O campo nome não pode ficar com valor nulo.")
+	@Size(max = 20,min = 3)
 	private String nome;
 	
 	public Long getCodigo() {
