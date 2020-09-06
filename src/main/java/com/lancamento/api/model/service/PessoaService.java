@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.lancamento.api.model.domain.Pessoa;
@@ -45,12 +48,17 @@ public class PessoaService {
 			throw new DataIntegrityException("Não é possivel excluir");
 		}
 	}
-	
-	//alterar
+
+	// alterar
 	public Pessoa alterar(Pessoa pessoa, Integer id) {
 		buscar(id);
 		pessoa.setId(id);
 		return objRepository.save(pessoa);
-		}
+	}
 
+	// paginação
+	public Page<Pessoa> BuscarPagina(Integer pagina, Integer linhaPorPagina, String ordem, String direcao) {
+		PageRequest pageRequest = PageRequest.of(pagina, linhaPorPagina, Direction.valueOf(direcao), ordem);
+		return objRepository.findAll(pageRequest);
+	}
 }
