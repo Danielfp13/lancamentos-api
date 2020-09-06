@@ -2,6 +2,8 @@ package com.lancamento.api.model.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -9,6 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.lancamento.api.dto.PessoaNewDTO;
+import com.lancamento.api.model.domain.Endereco;
 import com.lancamento.api.model.domain.Pessoa;
 import com.lancamento.api.model.repository.PessoaRepository;
 import com.lancamento.api.model.service.exception.DataIntegrityException;
@@ -34,6 +38,7 @@ public class PessoaService {
 	}
 
 	// salvar
+	@Transactional
 	public Pessoa salvar(Pessoa pessoa) {
 		pessoa = objRepository.save(pessoa);
 		return pessoa;
@@ -61,4 +66,20 @@ public class PessoaService {
 		PageRequest pageRequest = PageRequest.of(pagina, linhaPorPagina, Direction.valueOf(direcao), ordem);
 		return objRepository.findAll(pageRequest);
 	}
+
+	public Pessoa fromDTO(PessoaNewDTO objNewDto) {
+		Endereco endereco = new Endereco();
+		endereco.setBairro(objNewDto.getBairro());
+		endereco.setCep(objNewDto.getCep());
+		endereco.setCidade(objNewDto.getCidade());
+		endereco.setComplemento(objNewDto.getComplemento());
+		endereco.setEstado(objNewDto.getEstado());
+		endereco.setLougradouro(objNewDto.getLougradouro());
+		endereco.setNumero(objNewDto.getNumero());
+
+		Pessoa pessoa = new Pessoa(null, objNewDto.getNome(), objNewDto.getAtivo(), endereco);
+
+		return pessoa;
+	}
+
 }

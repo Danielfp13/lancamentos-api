@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lancamento.api.dto.PessoaDTO;
+import com.lancamento.api.dto.PessoaNewDTO;
 import com.lancamento.api.model.domain.Pessoa;
 import com.lancamento.api.model.service.PessoaService;
 
@@ -46,11 +47,13 @@ public class PessoaResource {
 
 	// salvar pesssoa
 	@PostMapping
-	public ResponseEntity<Pessoa> salvar(@Valid @RequestBody Pessoa pessoa) {
-		objService.salvar(pessoa);
+	public ResponseEntity<Pessoa> salvar(@Valid @RequestBody PessoaNewDTO pessoaNewDTO) {
+		Pessoa pessoa = objService.fromDTO(pessoaNewDTO);
+		pessoa = objService.salvar(pessoa);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(pessoa.getId()).toUri();
-		return ResponseEntity.created(uri).build();
-	}
+		return ResponseEntity.created(uri).body(pessoa);
+		}
+		
 
 	// deletar pessoa
 	@DeleteMapping(value = "/{id}")
@@ -71,7 +74,7 @@ public class PessoaResource {
 	public ResponseEntity<Page<PessoaDTO>> buscarPagina(@RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
 			@RequestParam(value = "linhasPorPagina", defaultValue = "5") Integer linhasPorPagina,
 			@RequestParam(value = "ordem", defaultValue = "nome") String ordem,
-			@RequestParam(value = "derecao", defaultValue = "ASC") String direcao) {
+			@RequestParam(value = "direcao", defaultValue = "ASC") String direcao) {
 		Page<Pessoa> lista = objService.BuscarPagina(pagina, linhasPorPagina, ordem, direcao);
 		Page<PessoaDTO> listaDto = lista.map(obj -> new PessoaDTO(obj));
 		return ResponseEntity.ok().body(listaDto);

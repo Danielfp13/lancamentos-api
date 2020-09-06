@@ -26,6 +26,41 @@ public class Pessoa {
 
 	@Embedded
 	private Endereco endereco;
+	
+	
+	
+
+	public Pessoa(Integer id, @NotNull(message = "O campo nome deve ser preenchido") String nome,
+			@NotNull(message = "O campo ativo deve ser preenchido") Boolean ativo, Endereco endereco) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.ativo = ativo;
+		this.endereco = endereco;
+	}
+
+
+	public Pessoa(Integer id, @NotNull(message = "O campo nome deve ser preenchido") String nome,
+			@NotNull(message = "O campo ativo deve ser preenchido") Boolean ativo, String lougradouro, String numero, 
+			String complemento, String bairro, String cep, String cidade, String estado) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.ativo = ativo;
+		this.endereco.setLougradouro(lougradouro);
+		this.endereco.setNumero(numero);
+		this.endereco.setComplemento(complemento);
+		this.endereco.setBairro(bairro);
+		this.endereco.setCep(cep);
+		this.endereco.setCidade(cidade);
+		this.endereco.setEstado(estado);	
+	}
+
+	
+	public Pessoa() {
+
+	}
+
 
 	public Integer getId() {
 		return id;
